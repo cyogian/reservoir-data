@@ -20,7 +20,7 @@ const formatTo3 = (y = "0.0") => {
   return result;
 };
 
-const drawStorageChart = (dataset, forecast, setCurrent) => {
+const drawStorageChart = (dataset, setCurrent) => {
   //Check the sample values available in the dataset
   // console.table(dataset);
 
@@ -245,7 +245,7 @@ const drawStorageChart = (dataset, forecast, setCurrent) => {
     .style("opacity", 0);
 };
 
-const drawReservoirChart = (dataset, forecast, setCurrent) => {
+const drawReservoirChart = (dataset, setCurrent) => {
   //Check the sample values available in the dataset
   // console.table(dataset);
 
@@ -548,12 +548,10 @@ const Monthly = (props) => {
     setReservoirLive(reservoir[reservoir.length - 2]);
   }, [reservoir]);
   useEffect(() => {
-    storage.length &&
-      drawStorageChart(storage, storageForecast, setCurrentStorage);
+    storage.length && drawStorageChart(storage, setCurrentStorage);
   }, [storage, setCurrentStorage]);
   useEffect(() => {
-    reservoir.length &&
-      drawReservoirChart(reservoir, reservoirForecast, setCurrentReservoir);
+    reservoir.length && drawReservoirChart(reservoir, setCurrentReservoir);
   }, [reservoir, setCurrentReservoir]);
   return (
     <div className={classes.Monthly}>
