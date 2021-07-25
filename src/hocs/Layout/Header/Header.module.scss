@@ -1,0 +1,23 @@
+.Header {
+  width: 100vw;
+  height: fit-content;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  margin: 0;
+  background-color: gainsboro;
+  padding-left: 5rem;
+  z-index: 20;
+  a {
+    text-decoration: none;
+    color: black;
+    padding: 1.5rem 1rem;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+  }
+  a.Active {
+    color: white !important;
+    background-color: black !important;
+  }
+}
