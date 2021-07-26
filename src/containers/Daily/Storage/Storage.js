@@ -22,7 +22,7 @@ function drawChart(data, setCurrent, Type) {
       text: "Storage by Date",
     },
     axisY: {
-      title: "Storage",
+      title: "Storage (in TMC)",
       suffix: " TMC",
     },
     axisX: {

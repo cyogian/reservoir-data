@@ -22,7 +22,7 @@ function drawChart(data, setCurrent, Type) {
       text: "Reservior Level by Date",
     },
     axisY: {
-      title: "Reservoir Level",
+      title: "Reservoir Level (in metres)",
       suffix: "metres",
     },
     axisX: {
