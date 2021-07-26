@@ -32,16 +32,21 @@ function drawChart(data, setCurrent, Type) {
       {
         type: "line",
         toolTipContent: "Date {x}: {y}metres",
-        dataPoints: data
-          .filter((d) => d[Type] === "Observed")
-          .map((d) => {
-            let date = moment(d.Date, "MMM-D-YYYY").toDate();
-            let rl = Number(d["RL [in metres]"]);
-            return {
-              x: date,
-              y: rl,
-            };
-          }),
+        dataPoints: data.map((d) => {
+          let date = moment(d.Date, "MMM-D-YYYY").toDate();
+          let rl = Number(d["RL [in metres]"]);
+          return d[Type] === "Observed"
+            ? {
+                x: date,
+                y: rl,
+              }
+            : {
+                x: date,
+                y: rl,
+                color: "Red",
+                lineColor: "Red",
+              };
+        }),
       },
     ],
   };
