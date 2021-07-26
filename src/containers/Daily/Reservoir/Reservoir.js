@@ -218,9 +218,17 @@ const Reservoir = (props) => {
           {loading && (
             <h2 style={{ color: "gold", paddingTop: "3rem" }}>Loading...</h2>
           )}
-          {data.length && (
-            <CanvasJSChart options={drawChart(data, setCurrent, Type)} />
-          )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: "1425px",
+            }}
+          >
+            {data.length && (
+              <CanvasJSChart options={drawChart(data, setCurrent, Type)} />
+            )}
+          </div>
         </Grid.Column>
       </Grid.Row>
     </Grid>
