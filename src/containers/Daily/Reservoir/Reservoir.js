@@ -35,16 +35,21 @@ function drawChart(data, setCurrent, Type) {
         dataPoints: data.map((d) => {
           let date = moment(d.Date, "MMM-D-YYYY").toDate();
           let rl = Number(d["RL [in metres]"]);
+          let mouseover = (e) => {
+            setCurrent(d);
+          };
           return d[Type] === "Observed"
             ? {
                 x: date,
                 y: rl,
+                mouseover,
               }
             : {
                 x: date,
                 y: rl,
                 color: "Red",
                 lineColor: "Red",
+                mouseover,
               };
         }),
       },

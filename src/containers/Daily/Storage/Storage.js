@@ -35,16 +35,21 @@ function drawChart(data, setCurrent, Type) {
         dataPoints: data.map((d) => {
           let date = moment(d.Dates, "D-MMMM-YYYY").toDate();
           let rl = Number(d["Storage[in TMC]"]);
+          let mouseover = (e) => {
+            setCurrent(d);
+          };
           return d[Type] === "Observed"
             ? {
                 x: date,
                 y: rl,
+                mouseover,
               }
             : {
                 x: date,
                 y: rl,
                 color: "Red",
                 lineColor: "Red",
+                mouseover,
               };
         }),
       },
