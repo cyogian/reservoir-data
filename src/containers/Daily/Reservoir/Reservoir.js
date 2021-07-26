@@ -6,8 +6,6 @@ import { DailyReservoirLevel } from "../../../data/links";
 import classes from "./Reservoir.module.scss";
 import moment from "moment";
 import { formatTo3 } from "../../Monthly/Monthly";
-import * as d3 from "d3";
-import "../chart.scss";
 import CanvasJSReact from "../canvasjs.react";
 
 const CanvasJS = CanvasJSReact.CanvasJS;
