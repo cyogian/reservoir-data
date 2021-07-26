@@ -4,7 +4,6 @@ import Sidebar from "../../hocs/Layout/Sidebar/Sidebar";
 import classes from "./Daily.module.scss";
 import Reservoir from "./Reservoir/Reservoir";
 import Storage from "./Storage/Storage";
-
 const Daily = (props) => {
   let isStorage = new URLSearchParams(window.location.search).get("storage", 0);
   return (

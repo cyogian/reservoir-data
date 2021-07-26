@@ -1,14 +1,12 @@
 .wrapper {
   position: relative;
 }
-
 .y-axis-label {
   fill: black;
   font-size: 1.4em;
   text-anchor: middle;
   transform: rotate(-90deg);
 }
-
 .listening-rect {
   fill: transparent;
 }
@@ -18,7 +16,6 @@
   stroke-dasharray: 1 1;
   fill: none;
 }
-
 .tooltip {
   opacity: 0;
   position: absolute;
@@ -34,7 +31,6 @@
   transition: all 0.1s ease-out;
   pointer-events: none;
 }
-
 .tooltip:before {
   content: "";
   position: absolute;
@@ -50,7 +46,6 @@
   transform-origin: center center;
   z-index: 10;
 }
-
 .tooltip-date {
   margin-bottom: 0.2em;
   font-weight: 600;

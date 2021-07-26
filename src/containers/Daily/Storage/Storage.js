@@ -6,6 +6,46 @@ import { DailyStorage } from "../../../data/links";
 import classes from "./Storage.module.scss";
 import moment from "moment";
 import { formatTo3 } from "../../Monthly/Monthly";
+import * as d3 from "d3";
+
+import CanvasJSReact from "../canvasjs.react";
+
+const CanvasJS = CanvasJSReact.CanvasJS;
+const CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+function drawChart(data, setCurrent, Type) {
+  return {
+    animationEnabled: true,
+    exportEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Storage by Date",
+    },
+    axisY: {
+      title: "Storage",
+      suffix: "TMC",
+    },
+    axisX: {
+      title: "Date",
+    },
+    data: [
+      {
+        type: "line",
+        toolTipContent: "Date {x}: {y}metres",
+        dataPoints: data
+          .filter((d) => d[Type] === "Observed")
+          .map((d) => {
+            let date = moment(d.Date, "D-MMMM-YYYY").toDate();
+            let rl = Number(d["Storage[in TMC]"]);
+            return {
+              x: date,
+              y: rl,
+            };
+          }),
+      },
+    ],
+  };
+}
 const Storage = (props) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -51,6 +91,11 @@ const Storage = (props) => {
       );
     setMaximum(maximum);
   }, [data, Type]);
+
+  // useEffect(() => {
+  //   data.length > 0 && drawChart(data, setCurrent, Type);
+  // }, [data, setCurrent, Type]);
+
   return (
     <Grid className={classes.Storage}>
       <Grid.Row style={{ fontSize: "1.75rem" }}>
@@ -64,7 +109,7 @@ const Storage = (props) => {
             Date:{" "}
             {(live &&
               live.Dates &&
-              moment(live.Dates, "DD-MMMM-YYYY").format("MMM-D-YYYY")) ||
+              moment(live.Dates, "D-MMMM-YYYY").format("MMM-D-YYYY")) ||
               "NA"}
           </div>
         </Grid.Column>
@@ -81,7 +126,7 @@ const Storage = (props) => {
                 Live Data{" "}
                 {(live &&
                   live.Dates &&
-                  moment(live.Dates, "DD-MMMM-YYYY").format("MMM-D-YYYY")) ||
+                  moment(live.Dates, "D-MMMM-YYYY").format("MMM-D-YYYY")) ||
                   "NA"}{" "}
                 :{" "}
               </Grid.Column>
@@ -102,7 +147,7 @@ const Storage = (props) => {
                 30-Days Forecasted Data{" "}
                 {(forecaste &&
                   forecaste.Dates &&
-                  moment(forecaste.Dates, "DD-MMMM-YYYY").format(
+                  moment(forecaste.Dates, "D-MMMM-YYYY").format(
                     "MMM-D-YYYY"
                   )) ||
                   "NA"}{" "}
@@ -170,8 +215,19 @@ const Storage = (props) => {
               {current && current[Type] === "Forecasted" && (
                 <h4 style={{ color: "red" }}>Forecasted</h4>
               )}
+              <h4>Maximum Storage: {maximum || "NA"} TMC</h4>
             </div>
           </div>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column width="16">
+          {loading && (
+            <h2 style={{ color: "gold", paddingTop: "3rem" }}>Loading...</h2>
+          )}
+          {data.length && (
+            <CanvasJSChart options={drawChart(data, setCurrent, Type)} />
+          )}
         </Grid.Column>
       </Grid.Row>
     </Grid>

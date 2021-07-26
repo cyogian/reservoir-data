@@ -6,7 +6,47 @@ import { DailyReservoirLevel } from "../../../data/links";
 import classes from "./Reservoir.module.scss";
 import moment from "moment";
 import { formatTo3 } from "../../Monthly/Monthly";
-const Storage = (props) => {
+import * as d3 from "d3";
+import "../chart.scss";
+import CanvasJSReact from "../canvasjs.react";
+
+const CanvasJS = CanvasJSReact.CanvasJS;
+const CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+function drawChart(data, setCurrent, Type) {
+  return {
+    animationEnabled: true,
+    exportEnabled: true,
+    theme: "light2",
+    title: {
+      text: "Reservior Level by Date",
+    },
+    axisY: {
+      title: "Reservoir Level",
+      suffix: "metres",
+    },
+    axisX: {
+      title: "Date",
+    },
+    data: [
+      {
+        type: "line",
+        toolTipContent: "Date {x}: {y}metres",
+        dataPoints: data
+          .filter((d) => d[Type] === "Observed")
+          .map((d) => {
+            let date = moment(d.Date, "MMM-D-YYYY").toDate();
+            let rl = Number(d["RL [in metres]"]);
+            return {
+              x: date,
+              y: rl,
+            };
+          }),
+      },
+    ],
+  };
+}
+const Reservoir = (props) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [Type, setType] = useState("");
@@ -49,8 +89,13 @@ const Storage = (props) => {
       );
     setMaximum(maximum);
   }, [data, Type]);
+
+  // useEffect(() => {
+  //   data.length > 0 && drawChart(data, setCurrent, Type);
+  // }, [data, setCurrent, Type]);
+
   return (
-    <Grid className={classes.Storage}>
+    <Grid className={classes.Reservoir}>
       <Grid.Row style={{ fontSize: "1.75rem" }}>
         <Grid.Column width="3">
           <div
@@ -88,13 +133,7 @@ const Storage = (props) => {
                 width="8"
                 style={{ padding: "1rem", textAlign: "right" }}
               >
-                30-Days Forecasted Data{" "}
-                {(forecaste &&
-                  forecaste.Date &&
-                  moment(forecaste.Date, "DD-MMMM-YYYY").format(
-                    "MMM-D-YYYY"
-                  )) ||
-                  "NA"}{" "}
+                30-Days Forecasted Data {(forecaste && forecaste.Date) || "NA"}{" "}
                 :{" "}
               </Grid.Column>
               <Grid.Column width="8" style={{ padding: "1rem 1rem 1rem 6rem" }}>
@@ -164,12 +203,23 @@ const Storage = (props) => {
               {current && current[Type] === "Forecasted" && (
                 <h4 style={{ color: "red" }}>Forecasted</h4>
               )}
+              <h4>Maximum Reservoir Level : {maximum || "NA"} meteres</h4>
             </div>
           </div>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column width="16">
+          {loading && (
+            <h2 style={{ color: "gold", paddingTop: "3rem" }}>Loading...</h2>
+          )}
+          {data.length && (
+            <CanvasJSChart options={drawChart(data, setCurrent, Type)} />
+          )}
         </Grid.Column>
       </Grid.Row>
     </Grid>
   );
 };
 
-export default Storage;
+export default Reservoir;
