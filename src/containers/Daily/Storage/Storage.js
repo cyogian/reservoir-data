@@ -86,12 +86,12 @@ const Storage = (props) => {
                 :{" "}
               </Grid.Column>
               <Grid.Column width="8" style={{ padding: "1rem 1rem 1rem 6rem" }}>
-                Reservoir Level :{" "}
+                Storage :{" "}
                 {(live &&
                   live["Storage[in TMC]"] &&
                   formatTo3(live["Storage[in TMC]"])) ||
                   "NA"}{" "}
-                metres
+                TMC
               </Grid.Column>
             </Grid.Row>
             <Grid.Row style={{ color: "red", paddingTop: 0 }}>
@@ -109,12 +109,12 @@ const Storage = (props) => {
                 :{" "}
               </Grid.Column>
               <Grid.Column width="8" style={{ padding: "1rem 1rem 1rem 6rem" }}>
-                Reservoir Level :{" "}
+                Storage :{" "}
                 {(forecaste &&
                   forecaste["Storage[in TMC]"] &&
                   formatTo3(forecaste["Storage[in TMC]"])) ||
                   "NA"}{" "}
-                metres
+                TMC
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -140,8 +140,37 @@ const Storage = (props) => {
                 width: "50rem",
                 right: "0.5rem",
                 top: "0.5rem",
+                padding: "0.5rem 1rem",
               }}
-            ></div>
+              className={classes.Display}
+            >
+              <h4>Date : {(current && current.Dates) || "NA"}</h4>
+              <h4>
+                Storage :{" "}
+                {(current &&
+                  current["Storage[in TMC]"] &&
+                  formatTo3(current["Storage[in TMC]"])) ||
+                  "NA"}
+              </h4>
+              <h4>
+                % Fill :{" "}
+                {(current && current["%Fill"] && formatTo3(current["%Fill"])) ||
+                  "NA"}{" "}
+                %
+              </h4>
+              <h4>
+                Last Year Storage :{" "}
+                {(current &&
+                  current["Last Year Storage [in TMC]"] &&
+                  formatTo3(current["Last Year Storage [in TMC]"])) ||
+                  "NA"}{" "}
+                TMC
+              </h4>
+              {current && current[Type] === "Observed" && <h4>Observed</h4>}
+              {current && current[Type] === "Forecasted" && (
+                <h4 style={{ color: "red" }}>Forecasted</h4>
+              )}
+            </div>
           </div>
         </Grid.Column>
       </Grid.Row>
