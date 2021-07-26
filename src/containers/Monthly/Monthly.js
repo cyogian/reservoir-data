@@ -7,7 +7,7 @@ import classes from "./Monthly.module.scss";
 import * as d3 from "d3";
 import "./chart.scss";
 import csvToArray from "../../data/csvToArray";
-const formatTo3 = (y = "0.0") => {
+export const formatTo3 = (y = "0.0") => {
   let x = y;
   if (typeof x === "number") {
     x = x.toString();
@@ -42,8 +42,8 @@ const drawStorageChart = (dataset, setCurrent) => {
   // 2. Create a chart dimension by defining the size of the Wrapper and Margin
 
   let dimensions = {
-    width: 708,
-    height: 470,
+    width: 706,
+    height: 450,
     margin: {
       top: 115,
       right: 20,
@@ -267,8 +267,8 @@ const drawReservoirChart = (dataset, setCurrent) => {
   // 2. Create a chart dimension by defining the size of the Wrapper and Margin
 
   let dimensions = {
-    width: 708,
-    height: 470,
+    width: 706,
+    height: 450,
     margin: {
       top: 115,
       right: 20,
@@ -582,7 +582,7 @@ const Monthly = (props) => {
             <Grid>
               <Grid.Row style={{ color: "blue", paddingBottom: 0 }}>
                 <Grid.Column
-                  style={{ padding: "1rem 1rem", textAlign: "right" }}
+                  style={{ padding: "1rem", textAlign: "right" }}
                   width="5"
                 >
                   Live Data{" "}
@@ -659,7 +659,7 @@ const Monthly = (props) => {
               borderRight: "0.5rem solid #8b0000",
             }}
           >
-            <h1 style={{ fontSize: "2.5rem", margin: "3rem 0.5rem" }}>
+            <h1 style={{ fontSize: "2.5rem", margin: "3rem 0.5rem 0 0.5rem" }}>
               Storage
             </h1>
             {currentStorage &&
@@ -741,7 +741,7 @@ const Monthly = (props) => {
               borderLeft: "0.5rem solid #8b0000",
             }}
           >
-            <h1 style={{ fontSize: "2.5rem", margin: "3rem 0.5rem" }}>
+            <h1 style={{ fontSize: "2.5rem", margin: "3rem 0.5rem 0 0.5rem" }}>
               Reservoir Levels
             </h1>
             {currentReservoir &&

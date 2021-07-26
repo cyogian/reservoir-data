@@ -32,11 +32,11 @@ const Home = (props) => {
                 padding: "1rem",
               }}
             >
-              Bengluru, the capital city of Karnataka fulfills its water supply
+              Bangalore, the capital city of Karnataka fulfills its water supply
               demand by receiving rainfall mainly from the Krishnarajasagar
-              (KRS) reservoir and the Kabini reservoir . The Banglore Water
+              (KRS) reservoir and the Kabini reservoir . The Bangalore Water
               Supply and Sewage Board(BWSSB) transports water from Shivasamudra
-              (intake point of water 100kms away from Banglor) which receives
+              (intake point of water 100kms away from Bangalore) which receives
               input from KRS reservoir to the main city.The city requires about
               1445 MLD for flourishing 9.5 million population spread over 800 sq
               km.
@@ -58,7 +58,7 @@ const Home = (props) => {
                     Kabini reservoir have faced significant stress periods
                     wherein reservoir levels have reached minimum dead storage
                     levels. Thus, pertaining to this rising concern of
-                    “uncertainty of water for urban water supply in Banglore” ,
+                    “uncertainty of water for urban water supply in Bangalore" ,
                     there is a need to monitor and forecast the reservoir water
                     levels and storage volumes.
                   </p>

@@ -15,7 +15,7 @@ function csvToArray(str, delimiter = ",") {
   const arr = rows.map(function (row) {
     const values = row.split(delimiter);
     const el = headers.reduce(function (object, header, index) {
-      object[header] = values[index];
+      object[header] = values[index].replace("\r", "");
       return object;
     }, {});
     return el;
