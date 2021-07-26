@@ -48,7 +48,7 @@ const drawStorageChart = (dataset, setCurrent) => {
       top: 115,
       right: 20,
       bottom: 40,
-      left: 160,
+      left: 80,
     },
   };
   dimensions.boundedWidth =
@@ -141,7 +141,7 @@ const drawStorageChart = (dataset, setCurrent) => {
     .append("text")
     .attr("class", "y-axis-label")
     .attr("x", -dimensions.boundedHeight / 2)
-    .attr("y", -dimensions.margin.left + 110)
+    .attr("y", -dimensions.margin.left + 30)
     .html("Storage (BCM)");
 
   //9. Generate X Axis
@@ -155,7 +155,7 @@ const drawStorageChart = (dataset, setCurrent) => {
 
   wrapper
     .append("g")
-    .style("transform", `translate(${50}px,${15}px)`)
+    .style("transform", `translateY(${15}px)`)
     .append("text")
     .attr("class", "title")
     .attr("x", dimensions.width / 2)
@@ -273,7 +273,7 @@ const drawReservoirChart = (dataset, setCurrent) => {
       top: 115,
       right: 20,
       bottom: 40,
-      left: 160,
+      left: 80,
     },
   };
   dimensions.boundedWidth =
@@ -365,7 +365,7 @@ const drawReservoirChart = (dataset, setCurrent) => {
     .append("text")
     .attr("class", "y-axis-label")
     .attr("x", -dimensions.boundedHeight / 2)
-    .attr("y", -dimensions.margin.left + 110)
+    .attr("y", -dimensions.margin.left + 30)
     .html("Reservoir Level (m)");
 
   //9. Generate X Axis
@@ -379,7 +379,7 @@ const drawReservoirChart = (dataset, setCurrent) => {
 
   wrapper
     .append("g")
-    .style("transform", `translate(${50}px,${15}px)`)
+    .style("transform", `translateY(${15}px)`)
     .append("text")
     .attr("class", "title")
     .attr("x", dimensions.width / 2)
@@ -483,8 +483,9 @@ const Monthly = (props) => {
   const [currentReservoir, setCurrentReservoir] = useState({});
   const [maximumStorage, setMaximumStorage] = useState("0");
   const [maximumRL, setMaximumRL] = useState("0");
-  const [fill, setFill] = useState("");
-  const [avgRL, setAvgRL] = useState("");
+  const [reservoirType, setReservoirType] = useState("");
+  const [storageType, setStorageType] = useState("");
+
   useEffect(() => {
     setStorageLoading(true);
     setReservoirLoading(true);
@@ -512,13 +513,13 @@ const Monthly = (props) => {
         .toString()
     );
     let forecast = storage[storage.length - 1];
-    setFill(
+    setStorageType(
       Object.keys(forecast || {}).filter((k) =>
-        k.startsWith("%Fill") ? true : false
+        k.startsWith("Type") ? true : false
       )[0]
     );
 
-    // console.log(forecast);
+    console.log(forecast);
     setCurrentStorage(forecast);
     setStorageForecast(forecast);
     setStorageLive(storage[storage.length - 2]);
@@ -536,10 +537,10 @@ const Monthly = (props) => {
         .toString()
     );
     let forecast = reservoir[reservoir.length - 1];
-    // console.log(forecast);
-    setAvgRL(
+    console.log(forecast);
+    setReservoirType(
       Object.keys(forecast || {}).filter((k) =>
-        k.startsWith("Last 10 Year Average Level") ? true : false
+        k.startsWith("Type") ? true : false
       )[0]
     );
 
@@ -661,6 +662,14 @@ const Monthly = (props) => {
             <h1 style={{ fontSize: "2.5rem", margin: "3rem 0.5rem" }}>
               Storage
             </h1>
+            {currentStorage &&
+            currentStorage[storageType]?.trim() === "Forecasted" ? (
+              <h2 style={{ color: "red", marginLeft: "0.75rem" }}>
+                Forecasted
+              </h2>
+            ) : (
+              <h2 style={{ marginLeft: "0.75rem" }}>Observed</h2>
+            )}
             <h3
               style={{
                 fontSize: "1.25rem",
@@ -699,8 +708,8 @@ const Monthly = (props) => {
               <h4>
                 % Fill :{" "}
                 {(currentStorage &&
-                  currentStorage[fill] &&
-                  formatTo3(currentStorage[fill])) ||
+                  currentStorage["%Fill"] &&
+                  formatTo3(currentStorage["%Fill"])) ||
                   "NA"}
                 %
               </h4>
@@ -735,6 +744,14 @@ const Monthly = (props) => {
             <h1 style={{ fontSize: "2.5rem", margin: "3rem 0.5rem" }}>
               Reservoir Levels
             </h1>
+            {currentReservoir &&
+            currentReservoir[reservoirType]?.trim() === "Forecasted" ? (
+              <h2 style={{ color: "red", marginLeft: "0.75rem" }}>
+                Forecasted
+              </h2>
+            ) : (
+              <h2 style={{ marginLeft: "0.75rem" }}>Observed</h2>
+            )}
             <h3
               style={{
                 fontSize: "1.25rem",
@@ -781,8 +798,10 @@ const Monthly = (props) => {
               <h4>
                 Last 10 yrs Average RL :{" "}
                 {(currentReservoir &&
-                  currentReservoir[avgRL] &&
-                  formatTo3(currentReservoir[avgRL])) ||
+                  currentReservoir["Last 10 Year Average Level (m)"] &&
+                  formatTo3(
+                    currentReservoir["Last 10 Year Average Level (m)"]
+                  )) ||
                   "NA"}
                 m
               </h4>
@@ -792,9 +811,8 @@ const Monthly = (props) => {
         <Grid.Row stretched>
           <Grid.Column width="8">
             {storageLoading && (
-              <h2 style={{ color: "whitesmoke" }}>Loading...</h2>
+              <h2 style={{ color: "gold", paddingTop: "3rem" }}>Loading...</h2>
             )}
-
             <div
               id="wrapper"
               className="wrapper"
@@ -812,7 +830,7 @@ const Monthly = (props) => {
           </Grid.Column>
           <Grid.Column width="8">
             {reservoirLoading && (
-              <h2 style={{ color: "whitesmoke" }}>Loading...</h2>
+              <h2 style={{ color: "gold", paddingTop: "3rem" }}>Loading...</h2>
             )}
             <div
               id="wrapper-r"
