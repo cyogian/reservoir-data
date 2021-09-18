@@ -16,9 +16,6 @@ function drawChart(data, setCurrent, Type) {
     animationEnabled: true,
     exportEnabled: true,
     theme: "light2",
-    title: {
-      text: "Storage by Date",
-    },
     axisY: {
       title: "Storage (in TMC)",
       suffix: " TMC",

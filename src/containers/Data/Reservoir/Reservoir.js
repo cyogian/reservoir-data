@@ -16,9 +16,6 @@ function drawChart(data, setCurrent, Type) {
     animationEnabled: true,
     exportEnabled: true,
     theme: "light2",
-    title: {
-      text: "Reservior Level by Date",
-    },
     axisY: {
       title: "Reservoir Level (in metres)",
       suffix: "metres",
