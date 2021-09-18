@@ -3,6 +3,7 @@ import { Grid, GridColumn } from "semantic-ui-react";
 import Sidebar from "../../hocs/Layout/Sidebar/Sidebar";
 import classes from "./Home.module.scss";
 import dam from "../../assets/images/dam.png";
+import hydroR from "../../assets/images/hydroR.png";
 const Home = (props) => {
   return (
     <div className={classes.Home}>
@@ -27,23 +28,44 @@ const Home = (props) => {
             <p
               style={{
                 height: "fit-content",
-                backgroundColor: "gold",
+                backgroundColor: "#e27000",
                 fontSize: "1.75rem",
                 padding: "1rem",
               }}
             >
               Bangalore, the capital city of Karnataka fulfills its water supply
               demand by receiving rainfall mainly from the Krishnarajasagar
-              (KRS) reservoir and the Kabini reservoir . The Bangalore Water
+              (KRS) reservoir and the Kabini reservoir. The Bangalore Water
               Supply and Sewage Board(BWSSB) transports water from Shivasamudra
               (intake point of water 100kms away from Bangalore) which receives
-              input from KRS reservoir to the main city.The city requires about
+              input from KRS reservoir to the main city. The city requires about
               1445 MLD for flourishing 9.5 million population spread over 800 sq
               km.
             </p>
           </GridColumn>
           <GridColumn width="11">
             <Grid>
+              <Grid.Row>
+                <Grid.Column width="16">
+                  <div
+                    style={{
+                      backgroundColor: "gold",
+                      fontSize: "1.75rem",
+                      padding: "1rem",
+                      color: "black",
+                      display: "flex",
+                      lineHeight: "2.5rem",
+                    }}
+                  >
+                    HydroR, [team of Wave2Web Hackathon-supported by Microsoft
+                    and BlackRock and organised by WRI, India] have made an
+                    attempt to develop a predictive model to forecast 1 month
+                    real time water availability in Krishna Raja Sagar
+                    reservoir.
+                    <img src={hydroR} alt="HydroR Logo" width={180} />
+                  </div>
+                </Grid.Column>
+              </Grid.Row>
               <Grid.Row stretched>
                 <Grid.Column width="7">
                   <p
@@ -73,7 +95,8 @@ const Home = (props) => {
                       position: "absolute",
                       bottom: "0",
                       left: "1rem",
-                      backgroundColor: "#ffff6e",
+                      backgroundColor: "#e27000",
+                      // backgroundColor: "#ffff6e",
                       padding: "0.5rem",
                       width: "calc(100% - 2rem)",
                       textAlign: "center",
@@ -85,33 +108,8 @@ const Home = (props) => {
                   </p>
                 </Grid.Column>
               </Grid.Row>
-              <Grid.Row>
-                <Grid.Column width="16">
-                  <p
-                    style={{
-                      backgroundColor: "#e27000",
-                      fontSize: "1.75rem",
-                      padding: "1rem",
-                      color: "black",
-                    }}
-                  >
-                    HydroR, [team of Wave2Web Hackathon-supported by Microsoft
-                    and BlackRock and organised by WRI, India] have made an
-                    attempt to develop a predictive model to forecast 1 month
-                    real time water availability in Krishna Raja Sagar
-                    reservoir.
-                  </p>
-                </Grid.Column>
-              </Grid.Row>
             </Grid>
           </GridColumn>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width="16">
-            <div
-              style={{ backgroundColor: "#ffff6e", height: "7.25rem" }}
-            ></div>
-          </Grid.Column>
         </Grid.Row>
       </Grid>
     </div>

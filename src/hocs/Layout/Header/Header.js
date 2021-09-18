@@ -8,11 +8,11 @@ const Header = (props) => {
       <NavLink to="/home" activeClassName={classes.Active} exact>
         Home
       </NavLink>
-      <NavLink to="/monthly" activeClassName={classes.Active} exact>
+      {/* <NavLink to="/monthly" activeClassName={classes.Active} exact>
         Monthly
-      </NavLink>
-      <NavLink to="/daily" activeClassName={classes.Active} exact>
-        Daily
+      </NavLink> */}
+      <NavLink to="/data" activeClassName={classes.Active} exact>
+        Reservoir Data
       </NavLink>
     </div>
   );

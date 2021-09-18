@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Grid } from "semantic-ui-react";
 import csvToArray from "../../../data/csvToArray";
-import { DailyStorage } from "../../../data/links";
-import classes from "./Storage.module.scss";
+import { DailyReservoirLevel } from "../../../data/links";
+import classes from "./Reservoir.module.scss";
 import moment from "moment";
 import { formatTo3 } from "../../Monthly/Monthly";
 import CanvasJSReact from "../canvasjs.react";
@@ -17,11 +17,11 @@ function drawChart(data, setCurrent, Type) {
     exportEnabled: true,
     theme: "light2",
     title: {
-      text: "Storage by Date",
+      text: "Reservior Level by Date",
     },
     axisY: {
-      title: "Storage (in TMC)",
-      suffix: " TMC",
+      title: "Reservoir Level (in metres)",
+      suffix: "metres",
     },
     axisX: {
       title: "Date",
@@ -29,10 +29,10 @@ function drawChart(data, setCurrent, Type) {
     data: [
       {
         type: "line",
-        toolTipContent: "Date {x}: {y}metres",
+        toolTipContent: "{x}<br/>{y}metres",
         dataPoints: data.map((d) => {
-          let date = moment(d.Dates, "D-MMMM-YYYY").toDate();
-          let rl = Number(d["Storage[in TMC]"]);
+          let date = moment(d.Date, "MMM-D-YYYY").toDate();
+          let rl = Number(d["RL [in metres]"]);
           let mouseover = (e) => {
             setCurrent(d);
           };
@@ -54,7 +54,7 @@ function drawChart(data, setCurrent, Type) {
     ],
   };
 }
-const Storage = (props) => {
+const Reservoir = (props) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [Type, setType] = useState("");
@@ -64,16 +64,16 @@ const Storage = (props) => {
   const [maximum, setMaximum] = useState(0);
   useEffect(() => {
     setLoading(true);
-    axios.get(DailyStorage).then((res) => {
+    axios.get(DailyReservoirLevel).then((res) => {
       setLoading(false);
-      let storageData = csvToArray(res.data);
-      console.log(storageData);
+      let reservoirData = csvToArray(res.data);
+      console.log(reservoirData);
       setType(
-        Object.keys(storageData[0] || {}).filter((k) =>
+        Object.keys(reservoirData[0] || {}).filter((k) =>
           k.startsWith("Type") ? true : false
         )[0]
       );
-      setData(storageData);
+      setData(reservoirData);
     });
   }, []);
 
@@ -92,9 +92,7 @@ const Storage = (props) => {
       .filter((x) => x[Type] === "Observed")
       .reduce(
         (acc, v) =>
-          acc > Number(v["Storage[in TMC]"])
-            ? acc
-            : Number(v["Storage[in TMC]"]),
+          acc > Number(v["RL [in metres]"]) ? acc : Number(v["RL [in metres]"]),
         0
       );
     setMaximum(maximum);
@@ -105,20 +103,21 @@ const Storage = (props) => {
   // }, [data, setCurrent, Type]);
 
   return (
-    <Grid className={classes.Storage}>
+    <Grid className={classes.Reservoir}>
       <Grid.Row style={{ fontSize: "1.75rem" }}>
         <Grid.Column width="3">
           <div
             style={{
               backgroundColor: "gold",
-              padding: "2.75rem 0.75rem",
+              padding: "1.5rem 0.75rem",
+              fontWeight: "bolder",
+              fontSize: "2.5rem",
             }}
           >
-            Date:{" "}
-            {(live &&
-              live.Dates &&
-              moment(live.Dates, "D-MMMM-YYYY").format("MMM-D-YYYY")) ||
-              "NA"}
+            Date:
+            <br />
+            <br />
+            {(live && live.Date) || "NA"}
           </div>
         </Grid.Column>
         <Grid.Column
@@ -131,20 +130,15 @@ const Storage = (props) => {
                 width="8"
                 style={{ padding: "1rem", textAlign: "right" }}
               >
-                Live Data{" "}
-                {(live &&
-                  live.Dates &&
-                  moment(live.Dates, "D-MMMM-YYYY").format("MMM-D-YYYY")) ||
-                  "NA"}{" "}
-                :{" "}
+                Live Data {(live && live.Date) || "NA"} :{" "}
               </Grid.Column>
               <Grid.Column width="8" style={{ padding: "1rem 1rem 1rem 6rem" }}>
-                Storage :{" "}
+                Reservoir Level :{" "}
                 {(live &&
-                  live["Storage[in TMC]"] &&
-                  formatTo3(live["Storage[in TMC]"])) ||
+                  live["RL [in metres]"] &&
+                  formatTo3(live["RL [in metres]"])) ||
                   "NA"}{" "}
-                TMC
+                metres
               </Grid.Column>
             </Grid.Row>
             <Grid.Row style={{ color: "red", paddingTop: 0 }}>
@@ -152,25 +146,34 @@ const Storage = (props) => {
                 width="8"
                 style={{ padding: "1rem", textAlign: "right" }}
               >
-                30-Days Forecasted Data{" "}
-                {(forecaste &&
-                  forecaste.Dates &&
-                  moment(forecaste.Dates, "D-MMMM-YYYY").format(
-                    "MMM-D-YYYY"
-                  )) ||
-                  "NA"}{" "}
-                :{" "}
+                1 Month ahead Forecasted Data{" "}
+                {(forecaste && forecaste.Date) || "NA"} :{" "}
               </Grid.Column>
               <Grid.Column width="8" style={{ padding: "1rem 1rem 1rem 6rem" }}>
-                Storage :{" "}
+                Reservoir Level :{" "}
                 {(forecaste &&
-                  forecaste["Storage[in TMC]"] &&
-                  formatTo3(forecaste["Storage[in TMC]"])) ||
+                  forecaste["RL [in metres]"] &&
+                  formatTo3(forecaste["RL [in metres]"])) ||
                   "NA"}{" "}
-                TMC
+                metres
               </Grid.Column>
             </Grid.Row>
           </Grid>
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row style={{ paddingTop: "0" }}>
+        <Grid.Column width="16" style={{ paddingRight: "0" }}>
+          <h1
+            style={{
+              padding: "1rem",
+              fontSize: "3rem",
+              background: "black",
+              color: "white",
+              textAlign: "center",
+            }}
+          >
+            RESERVOIR LEVELS
+          </h1>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
@@ -184,46 +187,62 @@ const Storage = (props) => {
               position: "relative",
             }}
           >
-            <h1 style={{ padding: "1rem 3rem", fontSize: "6rem" }}>Storage</h1>
             <div
               style={{
                 position: "absolute",
                 backgroundColor: "gold",
                 height: "15rem",
-                width: "50rem",
+                width: "calc(100% - 1rem)",
                 right: "0.5rem",
                 top: "0.5rem",
                 padding: "0.5rem 1rem",
               }}
               className={classes.Display}
             >
-              <h4>Date : {(current && current.Dates) || "NA"}</h4>
-              <h4>
-                Storage :{" "}
-                {(current &&
-                  current["Storage[in TMC]"] &&
-                  formatTo3(current["Storage[in TMC]"])) ||
-                  "NA"}
-              </h4>
-              <h4>
-                % Fill :{" "}
-                {(current && current["%Fill"] && formatTo3(current["%Fill"])) ||
-                  "NA"}{" "}
-                %
-              </h4>
-              <h4>
-                Last Year Storage :{" "}
-                {(current &&
-                  current["Last Year Storage [in TMC]"] &&
-                  formatTo3(current["Last Year Storage [in TMC]"])) ||
-                  "NA"}{" "}
-                TMC
-              </h4>
-              {current && current[Type] === "Observed" && <h4>Observed</h4>}
-              {current && current[Type] === "Forecasted" && (
-                <h4 style={{ color: "red" }}>Forecasted</h4>
-              )}
-              <h4>Maximum Storage: {maximum || "NA"} TMC</h4>
+              <Grid>
+                <Grid.Row>
+                  <Grid.Column width="8">
+                    <h1>Date : {(current && current.Date) || "NA"}</h1>
+                    <h1>
+                      Reservoir Level :{" "}
+                      {(current &&
+                        current["RL [in metres]"] &&
+                        formatTo3(current["RL [in metres]"])) ||
+                        "NA"}{" "}
+                      metres
+                    </h1>
+                    {current && current[Type] === "Observed" && (
+                      <h1 style={{ color: "blue", fontSize: "3rem" }}>
+                        Observed
+                      </h1>
+                    )}
+                    {current && current[Type] === "Forecasted" && (
+                      <h1 style={{ color: "red", fontSize: "3rem" }}>
+                        Forecasted
+                      </h1>
+                    )}
+                  </Grid.Column>
+                  <Grid.Column width="8">
+                    <h1>
+                      Last Year Level :{" "}
+                      {(current &&
+                        current["Last Year Level (m)"] &&
+                        formatTo3(current["Last Year Level (m)"])) ||
+                        "NA"}{" "}
+                      metres
+                    </h1>
+                    <h1>
+                      Last 10 Year Average Level :{" "}
+                      {(current &&
+                        current["Last 10 Year Average Level (m)"] &&
+                        formatTo3(current["Last 10 Year Average Level (m)"])) ||
+                        "NA"}{" "}
+                      metres
+                    </h1>
+                    <h1>Maximum Reservoir Level : {maximum || "NA"} meteres</h1>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
             </div>
           </div>
         </Grid.Column>
@@ -233,21 +252,21 @@ const Storage = (props) => {
           {loading && (
             <h2 style={{ color: "gold", paddingTop: "3rem" }}>Loading...</h2>
           )}
-          {data.length && (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                width: "1425px",
-              }}
-            >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              width: "1425px",
+            }}
+          >
+            {data.length && (
               <CanvasJSChart options={drawChart(data, setCurrent, Type)} />
-            </div>
-          )}
+            )}
+          </div>
         </Grid.Column>
       </Grid.Row>
     </Grid>
   );
 };
 
-export default Storage;
+export default Reservoir;
